@@ -1,22 +1,20 @@
 package com.mnubo.java.sdk.client.mapper;
 
-import com.mnubo.java.sdk.client.models.SmartObject;
-import org.joda.time.DateTime;
-import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
+import static java.lang.String.format;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.lang.String.format;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import org.joda.time.DateTime;
+import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
-/**
- * Created by mauro on 08/03/16.
- */
+import com.mnubo.java.sdk.client.models.SmartObject;
+
 public class SmartObjectSerializerTest extends AbstractSerializerTest {
     @Test
     public void testSerialize() throws Exception {

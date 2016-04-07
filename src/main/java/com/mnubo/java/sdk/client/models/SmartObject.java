@@ -14,9 +14,6 @@ import org.joda.time.DateTime;
 /**
  * SmartObject Bean. To build a SmartObject you must ask for SmartObjectBuilder using: the
  * static method SmartObject.builder()
- *
- * @author Mauro Arias
- * @since 2015/08/10
  */
 public final class SmartObject {
 

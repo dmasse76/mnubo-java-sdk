@@ -12,7 +12,7 @@ import static com.mnubo.java.sdk.client.Constants.CLIENT_MAX_TOTAL_CONNECTION;
 import static com.mnubo.java.sdk.client.Constants.CLIENT_SOCKET_TIMEOUT;
 import static com.mnubo.java.sdk.client.Constants.HOST_NAME;
 import static com.mnubo.java.sdk.client.Constants.HTTP_PROTOCOL;
-import static com.mnubo.java.sdk.client.Constants.PLATFORM_PORT;
+import static com.mnubo.java.sdk.client.Constants.INGESTION_PORT;
 import static com.mnubo.java.sdk.client.Constants.SECURITY_CONSUMER_KEY;
 import static com.mnubo.java.sdk.client.Constants.SECURITY_CONSUMER_SECRET;
 import static com.mnubo.java.sdk.client.utils.ValidationUtils.notBlank;
@@ -25,17 +25,55 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.springframework.web.client.RestTemplate;
+
 import com.mnubo.java.sdk.client.config.MnuboSDKConfig;
 import com.mnubo.java.sdk.client.spi.MnuboSDKClient;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * MnuboSDKFactory. This build a MnuboSDKClient instance.
- *
- * @author Mauro Arias
- * @since 2015/07/22
  */
 public abstract class MnuboSDKFactory {
+
+    //@formatter:off
+    /**
+     * returns a mnubo sdk client to send request to mnubo servers from a basic
+     * configuration. This uses default parameters
+     *
+     * This is the list of default parameters set:
+     * <b>client.config.platform-port</b>: 443.
+     * <b>client.config.autentication-port</b>: 443.
+     * <b>client.http.client.disable-redirect-handling</b>: false.
+     * <b>client.http.client.disable-automatic-retries</b>: false.
+     * <b>client.http.client.max-connections-per-route</b>: 200.
+     * <b>client.http.client.http.client.default-timeout</b>: 15000 ms.
+     * <b>client.http.client.http.client.connect-timeout</b>: 15000 ms.
+     * <b>client.http.client.connection-request-timeout</b>: 15000 ms.
+     * <b>client.http.client.http.client.socket-timeout</b>: 15000 ms.
+     * <b>client.http.client.max-total-connection</b>: 200.
+     * <b>client.http.client.base-path</b>: /api/v3.
+     * <b>client.config.http-protocol</b>: https.
+     *
+     * @param hostName: mnubo's servers.
+     * @param securityConsumerKey: unique identity key provided by mnubo.
+     * @param securityConsumerSecret: secret key provided by mnubo.
+     * @return MnuboSDKClient: mnubo sdk client instance.
+     *
+     */
+    //@formatter:on
+    public static MnuboSDKClient getClient(String hostName, String securityConsumerKey, String securityConsumerSecret) {
+        MnuboSDKConfig.Builder configBuilder = MnuboSDKConfig.builder();
+
+        notBlank(hostName, "hostname property cannot be empty or null.");
+        notBlank(securityConsumerKey, "securityConsumerKey property cannot be empty or null.");
+        notBlank(securityConsumerSecret, "securityConsumerSecret property cannot be empty or null.");
+
+        configBuilder.withHostName(hostName);
+        configBuilder.withSecurityConsumerKey(securityConsumerKey);
+        configBuilder.withSecurityConsumerSecret(securityConsumerSecret);
+
+        return generateClients(configBuilder.build());
+    }
 
     //@formatter:off
     /**
@@ -71,8 +109,8 @@ public abstract class MnuboSDKFactory {
         if (properties.containsKey(HOST_NAME)) {
             configBuilder.withHostName(properties.getProperty(HOST_NAME));
         }
-        if (properties.containsKey(PLATFORM_PORT)) {
-            configBuilder.withPlatformPort(properties.getProperty(PLATFORM_PORT));
+        if (properties.containsKey(INGESTION_PORT)) {
+            configBuilder.withIngestionPort(properties.getProperty(INGESTION_PORT));
         }
         if (properties.containsKey(AUTHENTICATION_PORT)) {
             configBuilder.withAuthenticationPort(properties.getProperty(AUTHENTICATION_PORT));
@@ -184,46 +222,6 @@ public abstract class MnuboSDKFactory {
         validIsFile(configFile);
         FileInputStream config = new FileInputStream(configFile);
         return getAdvanceClient(config);
-    }
-
-    //@formatter:off
-    /**
-     * returns a mnubo sdk client to send request to mnubo servers from a basic
-     * configuration. This uses default parameters
-     *
-     * This is the list of default parameters set:
-     * <b>client.config.platform-port</b>: 443.
-     * <b>client.config.autentication-port</b>: 443.
-     * <b>client.http.client.disable-redirect-handling</b>: false.
-     * <b>client.http.client.disable-automatic-retries</b>: false.
-     * <b>client.http.client.max-connections-per-route</b>: 200.
-     * <b>client.http.client.http.client.default-timeout</b>: 15000 ms.
-     * <b>client.http.client.http.client.connect-timeout</b>: 15000 ms.
-     * <b>client.http.client.connection-request-timeout</b>: 15000 ms.
-     * <b>client.http.client.http.client.socket-timeout</b>: 15000 ms.
-     * <b>client.http.client.max-total-connection</b>: 200.
-     * <b>client.http.client.base-path</b>: /api/v3.
-     * <b>client.config.http-protocol</b>: https.
-     *
-     * @param hostName: mnubo's servers.
-     * @param securityConsumerKey: unique identity key provided by mnubo.
-     * @param securityConsumerSecret: secret key provided by mnubo.
-     * @return MnuboSDKClient: mnubo sdk client instance.
-     *
-     */
-    //@formatter:on
-    public static MnuboSDKClient getClient(String hostName, String securityConsumerKey, String securityConsumerSecret) {
-        MnuboSDKConfig.Builder configBuilder = MnuboSDKConfig.builder();
-
-        notBlank(hostName, "hostname property cannot be empty or null.");
-        notBlank(securityConsumerKey, "securityConsumerKey property cannot be empty or null.");
-        notBlank(securityConsumerSecret, "securityConsumerSecret property cannot be empty or null.");
-
-        configBuilder.withHostName(hostName);
-        configBuilder.withSecurityConsumerKey(securityConsumerKey);
-        configBuilder.withSecurityConsumerSecret(securityConsumerSecret);
-
-        return generateClients(configBuilder.build());
     }
 
     private static MnuboSDKClient generateClients(MnuboSDKConfig config) {

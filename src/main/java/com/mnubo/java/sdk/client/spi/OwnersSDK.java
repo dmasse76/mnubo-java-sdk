@@ -4,9 +4,6 @@ import com.mnubo.java.sdk.client.models.Owner;
 
 /**
  * Owner SDK Client. This interface gives access to handle Owners.
- *
- * @author Mauro Arias
- * @since 2015/07/22
  */
 public interface OwnersSDK {
 

@@ -6,9 +6,6 @@ import com.mnubo.java.sdk.client.models.Event;
 
 /**
  * Event SDK Client. This interface gives access to handle events in specific objects.
- *
- * @author Mauro Arias
- * @since 2015/07/22
  */
 public interface EventsSDK {
 

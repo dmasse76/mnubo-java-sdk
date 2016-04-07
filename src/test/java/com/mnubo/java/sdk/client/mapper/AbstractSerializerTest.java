@@ -1,19 +1,17 @@
 package com.mnubo.java.sdk.client.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.joda.time.DateTimeZone.UTC;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.joda.time.DateTimeZone.UTC;
-
-/**
- * Created by mauro on 08/03/16.
- */
 public abstract class AbstractSerializerTest {
     protected Map<String, Boolean> DATETIME_SAMPLES = new HashMap<String, Boolean>() {{
         put("2015-08-15T07:00:00.174Z", true);

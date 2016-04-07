@@ -1,12 +1,5 @@
 package com.mnubo.java.sdk.client.mapper;
 
-import com.mnubo.java.sdk.client.models.Event;
-import org.joda.time.DateTime;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
-
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -15,9 +8,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by mauro on 08/03/16.
- */
+import java.util.List;
+import java.util.Map;
+
+import org.joda.time.DateTime;
+import org.junit.Test;
+
+import com.mnubo.java.sdk.client.models.Event;
+
 public class EventDeserializerTest extends AbstractSerializerTest {
 
     @Test

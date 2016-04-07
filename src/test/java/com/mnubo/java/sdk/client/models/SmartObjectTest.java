@@ -1,21 +1,18 @@
 package com.mnubo.java.sdk.client.models;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by mauro on 08/03/16.
- */
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.junit.Test;
+
 public class SmartObjectTest {
 
     @Test

@@ -16,9 +16,6 @@ import org.joda.time.DateTime;
 /**
  * Event Bean. To build an event you must ask for EventBuilder using: the static method
  * event.builder()
- *
- * @author Mauro Arias
- * @since 2015/08/10
  */
 public final class Event {
 

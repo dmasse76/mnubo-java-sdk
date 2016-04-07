@@ -13,9 +13,6 @@ import org.joda.time.DateTime;
 /**
  * Owner Bean. To build an Owner you must ask for OwnerBuilder using: the static method
  * Owner.builder()
- *
- * @author Mauro Arias
- * @since 2015/08/10
  */
 public final class Owner {
 

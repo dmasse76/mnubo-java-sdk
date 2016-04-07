@@ -1,16 +1,27 @@
 package com.mnubo.java.sdk.client.config;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.mnubo.java.sdk.client.Constants.*;
+import static com.mnubo.java.sdk.client.Constants.AUTHENTICATION_PORT;
 import static com.mnubo.java.sdk.client.Constants.CLIENT_BASE_PATH;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_CONNECTION_REQUEST_TIMEOUT;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_CONNECT_TIMEOUT;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_DEFAULT_TIMEOUT;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_DISABLE_AUTOMATIC_RETRIES;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_DISABLE_REDIRECT_HANDLING;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_MAX_CONNECTIONS_PER_ROUTE;
 import static com.mnubo.java.sdk.client.Constants.CLIENT_MAX_TOTAL_CONNECTION;
-import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.*;
+import static com.mnubo.java.sdk.client.Constants.CLIENT_SOCKET_TIMEOUT;
+import static com.mnubo.java.sdk.client.Constants.HOST_NAME;
+import static com.mnubo.java.sdk.client.Constants.HTTP_PROTOCOL;
+import static com.mnubo.java.sdk.client.Constants.INGESTION_PORT;
+import static com.mnubo.java.sdk.client.Constants.RESTITUTION_PORT;
+import static com.mnubo.java.sdk.client.Constants.SECURITY_CONSUMER_KEY;
+import static com.mnubo.java.sdk.client.Constants.SECURITY_CONSUMER_SECRET;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_BASE_PATH;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_CLIENT_PROTOCOL;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_HOST_PORT;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_MAX_CONNECTIONS_PER_ROUTE;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_MAX_TOTAL_CONNECTIONS;
+import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.Builder.DEFAULT_TIMEOUT;
 import static com.mnubo.java.sdk.client.config.MnuboSDKConfig.DEFAULT_SCOPE;
 import static java.lang.String.format;
 import static org.hamcrest.core.Is.is;
@@ -18,9 +29,13 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-/**
- * Created by mauro on 10/03/16.
- */
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 public class MnuboSDKConfigTest {
 
     @Rule
@@ -43,14 +58,24 @@ public class MnuboSDKConfigTest {
             put(null, format("%s property has to be a valid String.", CLIENT_BASE_PATH));
             put("", format("%s property has to be a valid String.", CLIENT_BASE_PATH));
         }});
-        put(PLATFORM_PORT, new HashMap<String, String>() {{
-            put(null, format("%s property has to be a valid String.", PLATFORM_PORT));
-            put("", format("%s property has to be a valid String.", PLATFORM_PORT));
-            put("54d", format("%s property has to be an positive integer.", PLATFORM_PORT));
-            put("0", format("%s property has to be a valid port.", PLATFORM_PORT));
-            put("-10", format("%s property has to be an positive integer.", PLATFORM_PORT));
-            put("9999999", format("%s property has to be a valid port.", PLATFORM_PORT));
+        put(INGESTION_PORT, new HashMap<String, String>() {{
+            put(null, format("%s property has to be a valid String.", INGESTION_PORT));
+            put("", format("%s property has to be a valid String.", INGESTION_PORT));
+            put("54d", format("%s property has to be an positive integer.", INGESTION_PORT));
+            put("0", format("%s property has to be a valid port.", INGESTION_PORT));
+            put("-10", format("%s property has to be an positive integer.", INGESTION_PORT));
+            put("9999999", format("%s property has to be a valid port.", INGESTION_PORT));
         }});
+            put(RESTITUTION_PORT, new HashMap<String, String>() {
+                {
+                    put(null, format("%s property has to be a valid String.", RESTITUTION_PORT));
+                    put("", format("%s property has to be a valid String.", RESTITUTION_PORT));
+                    put("54d", format("%s property has to be an positive integer.", RESTITUTION_PORT));
+                    put("0", format("%s property has to be a valid port.", RESTITUTION_PORT));
+                    put("-10", format("%s property has to be an positive integer.", RESTITUTION_PORT));
+                    put("9999999", format("%s property has to be a valid port.", RESTITUTION_PORT));
+                }
+            });
         put(AUTHENTICATION_PORT, new HashMap<String, String>() {{
             put(null, format("%s property has to be a valid String.", AUTHENTICATION_PORT));
             put("", format("%s property has to be a valid String.", AUTHENTICATION_PORT));
@@ -129,15 +154,16 @@ public class MnuboSDKConfigTest {
         assertThat(config.getHttpProtocol(), is(equalTo(DEFAULT_CLIENT_PROTOCOL)));
         assertThat(config.getHttpSoketTimeout(), is(equalTo(DEFAULT_TIMEOUT)));
         assertThat(config.getPlatformPort(), is(equalTo(DEFAULT_HOST_PORT)));
+        assertThat(config.getRestitutionPort(), is(equalTo(DEFAULT_HOST_PORT)));
         assertThat(config.getScope(), is(equalTo(DEFAULT_SCOPE)));
     }
 
     @Test
     public void customConfig() {
         MnuboSDKConfig config = MnuboSDKConfig.builder().withHostName("host").withSecurityConsumerKey("CK")
-                .withSecurityConsumerSecret("CS").withPlatformPort("8081").withHttpBasePath("/yyy/iii")
-                .withHttpProtocol("http").withHttpConnectionRequestTimeout("20").withHttpSocketTimeout("500")
-                .build();
+                                              .withSecurityConsumerSecret("CS").withIngestionPort("1111").withHttpBasePath("/yyy/iii")
+                                              .withHttpProtocol("http").withHttpConnectionRequestTimeout("20").withHttpSocketTimeout("500")
+                                              .withRestitutionPort("2222").build();
 
         assertThat(config.getHostName(), is(equalTo("host")));
         assertThat(config.getSecurityConsumerKey(), is(equalTo("CK")));
@@ -150,7 +176,8 @@ public class MnuboSDKConfigTest {
         assertThat(config.getHttpMaxTotalConnection(), is(equalTo(DEFAULT_MAX_TOTAL_CONNECTIONS)));
         assertThat(config.getHttpProtocol(), is(equalTo("http")));
         assertThat(config.getHttpSoketTimeout(), is(equalTo(500)));
-        assertThat(config.getPlatformPort(), is(equalTo(8081)));
+        assertThat(config.getPlatformPort(), is(equalTo(1111)));
+        assertThat(config.getRestitutionPort(), is(equalTo(2222)));
         assertThat(config.getScope(), is(equalTo(DEFAULT_SCOPE)));
     }
 
@@ -187,9 +214,12 @@ public class MnuboSDKConfigTest {
             case HOST_NAME:
                 config.withHostName(value);
                 break;
-            case PLATFORM_PORT:
-                config.withPlatformPort(value);
+            case INGESTION_PORT:
+                config.withIngestionPort(value);
                 break;
+        case RESTITUTION_PORT:
+            config.withRestitutionPort(value);
+            break;
             case AUTHENTICATION_PORT:
                 config.withAuthenticationPort(value);
                 break;

@@ -1,56 +1,69 @@
 # mnubo Java SDK
 
-Table of Content
-================
- 
-[1. Introduction](#section1)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-[2. Architecture](#section2) 
+- [mnubo Java SDK](#mnubo-java-sdk)
+- [Introduction](#introduction)
+- [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [Installation & Configuration](#installation-&-configuration)
+  - [Maven](#maven)
+  - [Download source code](#download-source-code)
+    - [Configuration](#configuration)
+- [Usage](#usage)
+  - [Getting a "MnuboSDKClient" (client) instance](#getting-a-mnubosdkclient-client-instance)
+    - [Basic Configuration](#basic-configuration)
+    - [Advanced Configuration](#advanced-configuration)
+  - [Creating owners](#creating-owners)
+  - [Updating owners](#updating-owners)
+  - [Deleting owners](#deleting-owners)
+  - [Claiming an object](#claiming-an-object)
+  - [Creating objects](#creating-objects)
+  - [Updating objects](#updating-objects)
+  - [Deleting objects](#deleting-objects)
+  - [Sending Events](#sending-events)
+        - [To send multiple events to a single object:](#to-send-multiple-events-to-a-single-object)
+    - [To send multiple events to multiple objects:](#to-send-multiple-events-to-multiple-objects)
+  - [Searching](#searching)
+    - [Sending search query](#sending-search-query)
+  - [Retrieving datasets](#retrieving-datasets)
+- [References](#references)
+- [Configuring the example](#configuring-the-example)
+  - [Running the example](#running-the-example)
 
-[3. Prerequisites](#section3)
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-[4. Installation & Configuration](#section4) 
 
-[5. Usage](#section5)
 
-[6. Important notes](#section6) 
 
-[7. Source code](#section7)
+Introduction
+============
 
-[8. Known limitations](#section8)
+This is a Java opinionated version of the original [API documentation](https://sop.mtl.mnubo.com/apps/doc/?i=t).
 
-[9. References](#section9)
+Architecture
+============
+Use class `MnuboSDKFactory` to get a client instance for ObjectsSDK, OwnersSDK, EventsSDK or SearchSDK.  Then the appropriate client API.
 
-[10. Integration](#section10)
+Current SDK support only synchronous call.
 
-[10.1. Prerequisites](#section11)
 
-[10.2. Configure the example](#section12)
+Prerequisites
+=============
 
-[10.3. Run the example](#section13)
+- Using this java SDK required JAVA 1.7 or higher.
+- The SDK has been built build maven 3.2.3.
 
----
-#<a name="section1"></a>1. Introduction
 
-To connect your Java application to our API use the mnubo Java SDK.
-
----
-#<a name="section3"></a>2. Architecture
-
-To get a client instance use the "MnuboSDKFactory" Class. Using this class, you will be able to create, update, delete owners/objects as well as send events.
-
----
-#<a name="section3"></a>3. Prerequisites
-
-- Maven
-- Java
-
----
-#<a name="section4"></a>4. Installation & Configuration
+Installation & Configuration
+============================
 
 Include the mnubo client in your Java application using:
 
-### Maven
+Maven
+-----
 Add the following into your pom.xml:
 ```
 <dependency>
@@ -60,7 +73,9 @@ Add the following into your pom.xml:
     <version>1.4.1</version>
 </dependency>
 ```
-### Download source code
+
+Download source code
+---------------------
 Download the source code and include it in your Java Application project.
 
 ### Configuration
@@ -70,15 +85,17 @@ The following parameters must be configured before using the mnubo client:
     - **consumer-key**.- Your unique client identity which is provided by mnubo.
     - **consumer-secret**.- Your secret key which is used in conjunction with the consumer key to access the mnubo server. This key is provided by mnubo.
 
----
-#<a name="section5"></a>5. Usage
 
-### Getting a "MnuboSDKClient" (client) instance
+Usage
+=====
+
+Getting a "MnuboSDKClient" (client) instance
+--------------------------------------------
 To get a client instance use the **"MnuboSDKFactory" Class**. Note that you only need one client instance. We provide multithreading support and a pool of connection.
 
 There are two ways to obtain a client instance:
 
-- **Basic**
+### Basic Configuration
 Using the basic method three mandatory parameters are required – Host, consumer key and consumer secret. Please see the example below:
 
 
@@ -93,10 +110,11 @@ private final String CONSUMER_SECRET = "your consumer SECRET!!!";
 MnuboSDKClient mnuboClient = MnuboSDKFactory.getClient( HOST , CONSUMER_KEY , CONSUMER_SECRET );
 ```
 
-- **Advanced**
+### Advanced Configuration
 Using this method you configure mandatory and optional parameters in a properties file. If you wish to use this method please contact mnubo.
 
-#### Creating Owners
+Creating owners
+---------------
 To create an owner you need to:
 1. Request an OwnersSDK interface using the mnubo client instance.
 2. Build an owner.
@@ -155,7 +173,8 @@ The JSON file "myOwnerFile.json" is as follows:
 }
 ```
 
-#### Updating Owners
+Updating owners
+---------------
 To update an owner you need to:
 1. Request an OwnersSDK interface using the mnubo client instance.
 2. Build an owner with the parameters to change.
@@ -206,7 +225,8 @@ The JSON file "myOwnerFile.json" is as follows. remember only parameters to chan
 }
 ```
 
-#### Delete Owners
+Deleting owners
+---------------
 
 This example describes how to delete an Owner:
 ```
@@ -220,7 +240,8 @@ OwnersSDK mnuboOwnersClient = mnuboClient.getOwnerClient();
 mnuboOwnersClient.delete( "john.smith@mycompany.com" );
 ```
 
-#### Owner claiming an object
+Claiming an object
+------------------
 
 This example describes how to link an Object with an Owner:
 ```
@@ -234,8 +255,9 @@ OwnersSDK mnuboOwnersClient = mnuboClient.getOwnerClient();
 mnuboOwnersClient.claim( "john.smith@mycompany.com", "my_device_Id" );
 ```
 
-#### Creating SmartObjects
-To create a SmartObject:
+Creating objects
+----------------------
+To create an object:
 1. Request an ObjectSDK interface from the mnubo client instance.
 2. Build an object.
 
@@ -299,8 +321,9 @@ The JSON file "myObjectFile.json" is as follows:
 }
 ```
 
-#### Updating SmartObjects
-To update a SmartObject:
+Updating objects
+----------------
+To update an object:
 1. Request an ObjectSDK interface from the mnubo client instance.
 2. Build an object with parameters to change.
 3. Note that an owner cannot be added during update
@@ -352,7 +375,8 @@ The JSON file "myObjectFile.json" is as follows:
 }
 ```
 
-#### delete SmartObjects
+Deleting objects
+----------------
 
 ```
 //get a mnubo client using the basic method.
@@ -365,7 +389,8 @@ ObjectsSDK mnuboObjectClient = mnuboClient.getObjectClient();
 mnuboObjectClient.delete( "connect_alpha.6hv135nw00393.1234567" );
 ```
 
-#### Sending Events
+Sending Events
+--------------
 To send events:
 1. Request an OwnersSDK interface from the mnubo client instance.
 2. Build an event.
@@ -447,7 +472,7 @@ The JSON file " myEventsByObjectFile.json " is as follows:
     }
 ]
 ```
-##### To send multiple events to multiple objects:
+### To send multiple events to multiple objects:
 
 ```
 //private String objectID = "mythermostat0301424";
@@ -558,39 +583,119 @@ The JSON file "myEvents.json" is as follows:
 ]
 ```
 
----
-#<a name="section6"></a>6. Important notes
+Searching
+---------
 
-N/A
+The SDK support sending search query to namespace datasets:
+1. Request an SearchSDK interface using the mnubo client instance.
+2. Provide your MQL query as a string.
 
----
-#<a name="section7"></a>7. Source code
+See [mnubo documentation](https://sop.mtl.mnubo.com/apps/doc/?i=t) for details on MQL format.
 
-https://github.com/mnubo/mnubo-java-sdk/tree/master/src/main
+### Sending search query
 
----
-#<a name="section8"></a>8. Known limitations
+This example describes how to send search query:
+```
+//Request a mnubo client using the basic method.
+MnuboSDKClient mnuboClient = MnuboSDKFactory.getClient( HOST , CONSUMER_KEY , CONSUMER_SECRET );
 
-N/A
+//Get a Search client interface
+SearchSDK mnuboSearchClient = mnuboClient.getSearchClient();
 
----
-#<a name="section9"></a>9. References
+//build the query
+String query = "{ \"from\": \"event\", \"select\": [ {\"value\": \"speed\"} ] }";
 
-http://www.oracle.com/technetwork/java/index.html
+//Send search
+ResultSet resultSet = mnuboSearchClient.search( query );
+```
 
-https://maven.apache.org/
+The `ResultSet` can be used to extract the column definitions read and the row values.
+`ResultSet` implement `Iterable<Row>` interface which allow iterating on the result values (`Row`).
+Column definitions are packaged in a `ColumnDefinition`.
+`ColumnDefinitions` can be extracted from the `ResultSet` or from each `Row`.
 
----
-#<a name="section10"></a>10. Integration
+```
+// Get all the column with label and Type
+List<ColumnDefinition> columns = resultSet.getColumnDefinitions();
 
-#<a name="section11"></a>10.1. Prerequisites
+// Get all the Search Rows (including column definitions)
+List<SearchRow> searchRows = resultSet.getRowsData();
 
-- to Have Java and maven installed.
-- To have mnubo's consumer key and consumer secret.
-- To have a Object Model already defined. 
+// Get all the column with label and Type from a Search Rows <line number>
+List<ColumnDefinition> columns = searchRows.get(0).getColumnDefinitions();
 
----
-#<a name="section12"></a>10.2. Configure the example
+// Iterator can be used to got through rs (rows)
+
+    while (resultSet.iterator().hasNext()) {
+        SearchRow searchRow = resultSet.iterator().next();
+
+        // Get Column Definitions for the Search Row
+        List<ColumnDefinition> columnDefinitions = searchRow.getColumnDefinitions();
+        
+        // You need to find the dataType to get the corresponding value
+        for (ColumnDefinition columnDefinition : columnDefinitions) {
+            String datatype = columnDefinition.getDataType();
+        }
+        
+        // Get data of the row for a specific column :
+        // The search Row method use the datatype (not the High Level Type)
+        // For example if the datatype is "STRING" and we want the data of the column "column1":
+        String stringData = searchRow.getString("column1");
+        
+        // Other Example with when datatype is "DOUBLE" and we want the data of the column "column2":
+        Double doubleData = searchRow.getDouble("column2");
+    }
+```
+
+Retrieving datasets
+-------------------
+To Get the datasets:
+1. Request an SearchSDK interface using the mnubo client instance.
+
+This example describes how to create an request to get the DataSets:
+```
+//Request a mnubo client using the basic method.
+MnuboSDKClient mnuboClient = MnuboSDKFactory.getClient( HOST , CONSUMER_KEY , CONSUMER_SECRET );
+
+//Get a Search client interface
+SearchSDK mnuboSearchClient = mnuboClient.getSearchClient();
+
+//Get the list of DataSet
+List<DataSet> datasets = mnuboSearchClient.getDatasets( query );
+```
+
+You can use the data return by the Basic Search Query.
+
+```
+    for(DataSet dataset: datasets) {
+        String datasetDescription = dataset.getDescription();
+        String datasetDisplayName = dataset.getDisplayName();
+        String datasetKey = dataset.getKey();
+        
+        for(Field field: dataset.getFields()) {
+            ContainerType containerType = field.getContainerType();
+            String fieldDescription = field.getDescription();
+            String fieldDisplayName = field.getDisplayName();
+            String fieldHighLevelType = field.getHighLevelType();
+            String fieldKey = field.getKey();
+        }
+    }
+```
+
+
+
+References
+==========
+
+[java](http://www.oracle.com/technetwork/java/index.html)
+
+[maven](https://maven.apache.org/)
+
+[mnubo documentation](https://sop.mtl.mnubo.com/apps/doc/?i=t)
+
+
+Configuring the example
+=======================
 
 - Go to the file 'SdkClientIntegrationTest' in '...example/src/test/java/com/mnubo/java/sdk/client/integration/' folder
 - Remove or comment out the 'Ignore' annotation.
@@ -600,8 +705,9 @@ https://maven.apache.org/
 - Add at least one Object's attribute to the fields 'OBJECT_ATTRIBUTES' and 'OBJECT_ATTRIBUTES_2_UPDATE' this can be the sames or not.
 - Add at least one Timeserie to the fields 'TIMESERIES_2_POST' and 'EXTRA_TIMESERIES_2_POST' this can be the sames or not.
 
----
-#<a name="section13"></a>10.3. Run the example
+
+Running the example
+-------------------
 
 - Go to '...example/' folder
 - Invoke 'mvn package'.

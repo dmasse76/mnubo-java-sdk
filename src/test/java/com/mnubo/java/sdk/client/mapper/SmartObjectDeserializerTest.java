@@ -1,14 +1,5 @@
 package com.mnubo.java.sdk.client.mapper;
 
-import com.mnubo.java.sdk.client.models.SmartObject;
-import org.hamcrest.CoreMatchers;
-import org.joda.time.DateTime;
-import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static java.lang.String.format;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -16,9 +7,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by mauro on 08/03/16.
- */
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hamcrest.CoreMatchers;
+import org.joda.time.DateTime;
+import org.junit.Test;
+
+import com.mnubo.java.sdk.client.models.SmartObject;
+
 public class SmartObjectDeserializerTest extends AbstractSerializerTest {
     @Test
     public void testDeserialize() throws Exception {
